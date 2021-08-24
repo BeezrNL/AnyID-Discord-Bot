@@ -17,7 +17,6 @@ for scholar in scholarList:
     currentScholarData = scholarData.getScholarData(scholar["wallet_adress"])
     totalSlp = currentScholarData["total"]
 
-    #with open("/home/Treyzeque/DiscordBot/scholars/"+ scholar["wallet_adress"] +".json", "w") as file:
     with open("scholars/"+ scholar["wallet_adress"] +".json", "r+") as file:   
         newScholarData = {"date": currentDate, "total_slp": totalSlp}
         # First we load existing data into a dict.
