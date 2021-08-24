@@ -5,6 +5,8 @@ import discord
 import tokenData
 from quickchart import QuickChart
 
+import scholarHistory
+
 #These functions lack errorhandling
 
 #Function to get scholarwallet
@@ -52,12 +54,7 @@ def getClaimDate(author, discordID):
 
     return embedMsg
 
-#function to get scholar file content
-def getScholarEarningHistory(walletAddress):
-    with open("scholars/"+ walletAddress +".json", "r") as getScholarEarnings:
-        scholarEarningContent = getScholarEarnings.read()
-        scholarEarning = json.loads(scholarEarningContent)
-    return scholarEarning
+
 
 #function to creat earning report
 def createEarnReport(author, discordID):
@@ -86,8 +83,7 @@ def createEarnReport(author, discordID):
     slpValueInPhp = round(tokenData.getSlpPrice("php") * totalSlp, 2)
 
     #Prepare the data
-    scholarEarningHistory = getScholarEarningHistory(walletAddress)
-    print(scholarEarningHistory)
+    scholarEarningHistory = scholarHistory.getScholarEarningHistory(walletAddress)
 
     labels = []
     slpEarned = []
@@ -96,8 +92,7 @@ def createEarnReport(author, discordID):
         labels.append(scholarEarningHistory[i]["date"])
         slpEarned.append(scholarEarningHistory[i]["total_slp"])
         i += 1
-
-    print(labels)
+        
     #Draw chart
     qc = QuickChart()
     qc.width = 500
@@ -125,7 +120,7 @@ def createEarnReport(author, discordID):
         },
     }
     # Write a file
-    qc.to_file("tmp/mychart.png")
+    qc.to_file("tmp/myslp.png")
 
     if totalSlp - scholarEarningHistory[-1]["total_slp"] > 0:
         earnedToday = totalSlp - scholarEarningHistory[-1]["total_slp"]
@@ -136,7 +131,7 @@ def createEarnReport(author, discordID):
         earnedYesterday = scholarEarningHistory[-1]["total_slp"] - scholarEarningHistory[-2]["total_slp"]
     else:
         earnedToday = 0
-        
+
     #Create embedded message
     embedMsg = discord.Embed(title="Earning report of "+str(author), description=" \n The values below is the total amount earned. As per terms you will receive 50% of the total SLP farmed.", color=0x39fc03)
     embedMsg.add_field(name="Total SLP since last payout", value=str(totalSlp)+" SLP", inline=False)
@@ -149,6 +144,6 @@ def createEarnReport(author, discordID):
     embedMsg.add_field(name="Earned yesterday", value=str(earnedYesterday) + " SLP", inline=True)
     embedMsg.add_field(name="Average SLP/day", value=str(avgSlpDay) + " SLP ", inline=True)
 
-    file = discord.File("tmp/mychart.png", filename="image.png")
+    file = discord.File("tmp/myslp.png", filename="image.png")
     embedMsg.set_image(url="attachment://image.png")
     return embedMsg, file

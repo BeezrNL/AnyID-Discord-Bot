@@ -2,7 +2,7 @@
 # !!! SHOULD ALWAY RUN AT END OF DAY !!!
 import json
 from datetime import datetime
-import scholarData
+import scholarSlp, scholarMmr
 
 currentDate = datetime.today().strftime('%Y-%m-%d')
 
@@ -14,11 +14,14 @@ with open('scholars/scholars.json') as f:
 
 for scholar in scholarList:
 
-    currentScholarData = scholarData.getScholarData(scholar["wallet_adress"])
+    currentScholarData = scholarSlp.getScholarData(scholar["wallet_adress"])
     totalSlp = currentScholarData["total"]
 
+    currentScholarMmr = scholarMmr.getScholarData(scholar["wallet_adress"])
+    rating = currentScholarMmr['items'][1]['elo']
+
     with open("scholars/"+ scholar["wallet_adress"] +".json", "r+") as file:   
-        newScholarData = {"date": currentDate, "total_slp": totalSlp}
+        newScholarData = {"date": currentDate, "total_slp": totalSlp, "mmr":rating}
         # First we load existing data into a dict.
         file_data = json.load(file)
         file_data.append(newScholarData)

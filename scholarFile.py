@@ -7,7 +7,7 @@ def createScholarFile(filename):
     if not file_exists:
         currentDate = datetime.today().strftime('%Y-%m-%d')
 
-        addScholarData = [{"date": currentDate, "total_slp": 0}]
+        addScholarData = [{"date": currentDate, "total_slp": 0, "mmr":0}]
         addScholarDataJson = json.dumps(addScholarData)
 
         f=open("scholars/"+ filename +".json","w+")
