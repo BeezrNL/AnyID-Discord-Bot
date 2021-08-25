@@ -84,11 +84,11 @@ def createEarnReport(author, discordID):
 
     #Prepare the data
     scholarEarningHistory = scholarHistory.getScholarEarningHistory(walletAddress)
-
+    print(scholarEarningHistory)
     labels = []
     slpEarned = []
     i = 0
-    while i < 15:
+    while i < len(scholarEarningHistory):
         labels.append(scholarEarningHistory[i]["date"])
         slpEarned.append(scholarEarningHistory[i]["total_slp"])
         i += 1

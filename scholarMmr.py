@@ -30,14 +30,14 @@ def createMmrReport(author, discordID):
     totalPlayed = win + draw + lose
 
     #Prepare the data
-    scholarEarningHistory = scholarHistory.getScholarMmrHistory(walletAddress)
+    scholarMmrHistory = scholarHistory.getScholarMmrHistory(walletAddress)
 
     labels = []
     mmrElo = []
     i = 0
-    while i < 15:
-        labels.append(scholarEarningHistory[i]["date"])
-        mmrElo.append(scholarEarningHistory[i]["mmr"])
+    while i < len(scholarMmrHistory):
+        labels.append(scholarMmrHistory[i]["date"])
+        mmrElo.append(scholarMmrHistory[i]["mmr"])
         i += 1
     
     #Draw chart
